@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dynamic Select Form</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Dynamic Select Form</h1>
+    <form method="POST" action="{{ url_for('index') }}">
+        {{ form.csrf_token }}
+        {{ form.states.label }} {{ form.states() }}<br>
+        {{ form.cities.label }} {{ form.cities() }}<br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <script>
+        const states = [
+            { value: 'CA', label: 'California' },
+            { value: 'NY', label: 'New York' },
+            { value: 'TX', label: 'Texas' }
+        ];
+
+        const cities = {
+            'CA': ['Los Angeles', 'San Francisco', 'San Diego'],
+            'NY': ['New York City', 'Buffalo', 'Rochester'],
+            'TX': ['Houston', 'Dallas', 'Austin']
+        };
+
+        $(document).ready(function() {
+            const stateSelect = $('#states');
+            const citySelect = $('#cities');
+
+            states.forEach(function(state) {
+                stateSelect.append('<option value="' + state.value + '">' + state.label + '</option>');
+            });
+
+            stateSelect.change(function() {
+                const selectedState = $(this).val();
+                citySelect.empty();
+                cities[selectedState].forEach(function(city) {
+                    citySelect.append('<option value="' + city + '">' + city + '</option>');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

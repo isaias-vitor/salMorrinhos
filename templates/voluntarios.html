@@ -1,0 +1,90 @@
+{% extends 'bases/base_lista_cargos.html' %}  
+
+{% block titulo %} {{titulo}} {% endblock %}
+
+{% block rows %}
+
+        {% for voluntario in lista_voluntarios %}
+            <tr onclick="window.location=`{{url_for('pessoas', pessoa=voluntario.id)}}`">
+                <td>{{loop.index}}</td>
+                <td class="text-nowrap">{{voluntario.nome}}</td>
+                <td class="text-nowrap">{{voluntario.cidade}}</td>
+                <td class="text-nowrap">{{voluntario.comum}}</td>
+                <td class="text-nowrap">{{voluntario.setor}}</td>
+            </tr>
+        {% endfor %}
+    
+{% endblock %}
+
+{% block modal %}
+<!-- Modal -->
+<div class="modal" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-0">
+            <div class="modal-body">
+                <div class="mb-4 d-flex justify-content-between">
+                    <h4 class="modal-title d-inline" id="modalLabel">Adicionar Voluntário</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST">
+
+                    {{ form.hidden_tag() }}
+
+                    <label for="nomeVoluntario" class="col-form-label">Nome completo</label>
+                    {{ form.nome(id="nomeVoluntario", class="form-control") }}
+                
+                    <label for="setorVoluntario" class="col-form-label mt-3">Setor</label>
+                    {{ form.setor(id="setorVoluntario", class="form-select") }}
+                    
+                    <label for="cidadeVoluntario" class="col-form-label mt-3">Cidade</label>
+                    {{ form.cidade(id="cidadeVoluntario", class="form-select") }}
+
+                    <label for="comumVoluntario" class="col-form-label mt-3">Comum</label>
+                    {{ form.comum(id="comumVoluntario", class="form-select") }}
+
+                    <div class="d-flex justify-content-center mb-1 mt-4">
+                        <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">Cancelar</button>
+                        {{ form.submit(id="salvar", class="btn btn-outline-secondary") }}
+                    </div>
+
+                    {% if form.validate_on_submit():%}
+                    <script>alert('aaaaaaaaaaaa')</script>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+  
+{% endblock %}
+
+{% block dynamic_select %}
+<script>
+    const comuns = {{ igrejas | tojson }};
+    const selectSetor = document.getElementById('setorVoluntario');
+    const selectCidade = document.getElementById('cidadeVoluntario');
+    const selectComum = document.getElementById('comumVoluntario');
+
+    selectSetor.addEventListener('change', ()=>{
+        const cidades = Object.keys(comuns[selectSetor.value]);
+        selectCidade.innerHTML = '';
+        cidades.forEach((cidade) => {
+            const option = document.createElement('option');
+            option.value = cidade;
+            option.textContent = cidade;
+            selectCidade.appendChild(option);
+        });
+    });
+
+    selectCidade.addEventListener('change', ()=>{
+        const cidades = comuns[selectSetor.value][selectCidade.value];
+        selectComum.innerHTML = '';
+        cidades.forEach((comum) => {
+            const option = document.createElement('option');
+            option.value = comum;
+            option.textContent = comum;
+            selectComum.appendChild(option)
+        });
+    })
+</script>
+{% endblock %}

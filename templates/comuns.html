@@ -1,0 +1,129 @@
+{% extends 'bases/base.html' %}
+
+{% block content %}
+<div class="container sticky-top mt-5">
+    <h3 class="col-auto text-center">Comuns Congregações</h3>
+    <div class="row justify-content-between my-4">
+        <!-- Campo de pesquisa -->
+        <div class="col-8 col-lg-4">
+            <input type="text" id="campoPesquisa" class="form-control rounded-4" placeholder="Pesquisar...">
+        </div>
+        <div class="col-3 d-flex justify-content-end">
+            <button class="btn btn-outline-secondary btn-sm col-auto" data-bs-toggle="modal" data-bs-target="#modal">
+                Adicionar
+            </button>
+        </div>
+    </div>
+
+    <div class="tabela-home table-responsive justify-content-center p-lg-5 p-2 border bg-white rounded mt-3">
+        <table class="table table-bordered table-sm mb-0 table-borderless">
+            <thead>
+                <tr>
+                    <th class="text-nowrap" scope="col">Nome</th>
+                    <th class="text-nowrap text-center" scope="col">Cidade</th>
+                    <th class="text-nowrap text-center" scope="col">Setor</th>
+                    <th class="text-nowrap text-center" scope="col">Zona</th>
+                    <th class="text-nowrap text-end" scope="col">Tipo</th>
+                </tr>
+            </thead>  
+            <tbody class="table-group-divider">
+                {% for comum in comuns %}
+                    <tr onclick="window.location=`{{url_for('comum', nome_comum=comum.nome)}}`">
+                        <td class="text-nowrap" scope="col">{{ comum.nome }}</td>
+                        <td class="text-nowrap text-center" scope="col">{{ comum.cidade }}</td>
+                        <td class="text-nowrap text-center" scope="col">{{ comum.setor }}</td>
+                        <td class="text-nowrap text-center" scope="col">{{ comum.zona }}</td>
+                        <td class="text-nowrap text-end" scope="col">{{ comum.tipo }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-0">
+            <div class="modal-body">
+                <div class="mb-4 d-flex justify-content-between">
+                    <h4 class="modal-title d-inline" id="modalLabel">Adicionar Comum</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+
+                    <label for="nomeComum" class="col-form-label">Nome</label>
+                    {{ form.nome(id="nomeComum", class="form-control") }}
+
+                    <label for="enderecoComum" class="col-form-label">Endereço</label>
+                    {{ form.endereco(id="enderecoComum", class="form-control") }}
+                
+                    <label for="setorComum" class="col-form-label mt-3">Setor</label>
+                    {{ form.setor(id="setorComum", class="form-select") }}
+
+                    <label for="cidadeComum" class="col-form-label mt-3">Cidade</label>
+                    {{ form.cidade(id="cidadeComum", class="form-select") }}
+
+                    <label for="zonaComum" class="col-form-label mt-3">Zona</label>
+                    {{ form.zona(id="zonaComum", class="form-select") }}
+
+                    <label for="tipoComum" class="col-form-label mt-3">Tipo</label>
+                    {{ form.tipo(id="tipoComum", class="form-select") }}
+
+                    <label for="reformaComum" class="col-form-label mt-3">Em reforma?</label>
+                    {{ form.reforma(id="reformaComum", class="form-select") }}
+
+                    <label for="construcaoComum" class="col-form-label mt-3">Em construção?</label>
+                    {{ form.construcao(id="construcaoComum", class="form-select") }}
+
+                    <label for="membrosComum" class="col-form-label mt-3">Quantidade de membros</label>
+                    {{ form.membros(id="membrosComum", class="form-select") }}
+
+                    <div class="d-flex justify-content-center mb-1 mt-4">
+                        <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">Cancelar</button>
+                        {{ form.submit(id="salvar", class="btn btn-outline-secondary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Quando alguém digitar algo no campo de pesquisa
+    document.getElementById('campoPesquisa').onkeyup = function() {
+        let texto = document.getElementById('campoPesquisa').value;
+        let linhas = document.getElementsByTagName('tr');
+        
+        for(let linha of linhas) {
+            // Se o texto da linha contém o que foi digitado
+            if(linha.innerText.toLowerCase().includes(texto.toLowerCase())) {
+                linha.style.display = '';
+            } else {
+                linha.style.display = 'none';
+            }
+        }
+    }
+</script>
+
+{% endblock %}
+
+{% block dynamic_select %}
+<script>
+    const comuns = {{ igrejas | tojson }};
+    const selectSetor = document.getElementById('setorComum');
+    const selectCidade = document.getElementById('cidadeComum');
+
+    selectSetor.addEventListener('change', ()=>{
+        const cidades = Object.keys(comuns[selectSetor.value]);
+        selectCidade.innerHTML = '';
+        cidades.forEach((cidade) => {
+            const option = document.createElement('option');
+            option.value = cidade;
+            option.textContent = cidade;
+            selectCidade.appendChild(option);
+        });
+    });
+</script>
+{% endblock %}

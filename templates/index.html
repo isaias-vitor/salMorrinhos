@@ -1,0 +1,160 @@
+{% extends 'bases/base.html' %}
+
+{% block content %}
+
+<div class="qtdCargos sticky-top container mt-5">
+
+    <div class="row align-items-start d-none d-lg-flex" id="cargosDesktop">
+
+        <div id="palavra" class="col col-3 p-1">
+
+            {% for funcao, detalhes in funcoes['palavra'].items() %}
+            <a href="{{url_for('cargos', cargo=detalhes[1])}}">
+                <div class="bg-white p-2 rounded card-cargo d-flex justify-content-between mb-2">
+                    <strong>{{funcao}}</strong>
+                    {% if detalhes[0] != 0 %}
+                    <span>{{detalhes[0]}}</span>
+                    {% else %}
+                    <span>-</span>
+                    {% endif %}
+                </div>
+            </a>
+            {% endfor %}
+    
+        </div>
+    
+        <div id="musica" class="col col-3 p-1">
+    
+            {% for funcao, detalhes in funcoes['musica'].items() %}
+            <a href="{{url_for('cargos', cargo=detalhes[1])}}">
+                <div class="bg-white p-2 rounded card-cargo d-flex justify-content-between mb-2">
+                    <strong>{{funcao}}</strong>
+                    {% if detalhes[0] != 0 %}
+                    <span>{{detalhes[0]}}</span>
+                    {% else %}
+                    <span>-</span>
+                    {% endif %}
+                </div>
+            </a>
+            {% endfor %}
+    
+        </div>
+
+        <div id="adm" class="col col-3 p-1">
+    
+            {% for funcao, detalhes in funcoes['adm'].items() %}
+
+            <a href="{{url_for('cargos', cargo=detalhes[1])}}">
+
+                <div class="bg-white p-2 rounded card-cargo d-flex justify-content-between mb-2">
+                    <strong>{{funcao}}</strong>
+                    {% if detalhes[0] != 0 %}
+                    <span>{{detalhes[0]}}</span>
+                    {% else %}
+                    <span>-</span>
+                    {% endif %}
+                </div>
+            </a>
+
+            {% endfor %}
+    
+        </div>
+
+        <div id="cargos" class="col col-3 p-1">
+    
+            {% for funcao, detalhes in funcoes['cargos'].items() %}
+
+            <a href="{{url_for('cargos', cargo=detalhes[1])}}">
+
+                <div class="bg-white p-2 rounded card-cargo d-flex justify-content-between mb-2">
+                    <strong>{{funcao}}</strong>
+                    {% if detalhes[0] != 0 %}
+                    <span>{{detalhes[0]}}</span>
+                    {% else %}
+                    <span>-</span>
+                    {% endif %} 
+                </div>
+            <a href="{{url_for('cargos', cargo=detalhes[1])}}">    
+            {% endfor %}
+    
+        </div>
+
+    </div>
+
+    <div class="row justify-content-center d-flex d-lg-none" id="cargosDesktop">
+        <div id="palavra" class="col col-11 mb-4 p-1">
+
+            {% for funcao, detalhes in funcoes['palavra'].items() %}
+            <a href="{{url_for('cargos', cargo=detalhes[1])}}">
+                <div class="bg-white p-2 rounded card-cargo d-flex justify-content-between mb-2">
+                    <strong>{{funcao}}</strong>
+                    {% if detalhes[0] != 0 %}
+                    <span>{{detalhes[0]}}</span>
+                    {% else %}
+                    <span>-</span>
+                    {% endif %}
+                </div>
+            </a>
+            {% endfor %}
+    
+        </div>
+        <div id="musica" class="col col-11 mb-4 p-1">
+    
+            {% for funcao, detalhes in funcoes['musica'].items() %}
+            <a href="{{url_for('cargos', cargo=detalhes[1])}}">
+                <div class="bg-white p-2 rounded card-cargo d-flex justify-content-between mb-2">
+                    <strong>{{funcao}}</strong>
+                    {% if detalhes[0] != 0 %}
+                    <span>{{detalhes[0]}}</span>
+                    {% else %}
+                    <span>-</span>
+                    {% endif %}
+                </div>
+            </a>
+            {% endfor %}
+    
+        </div>
+
+        <div id="adm" class="col col-11 mb-4 p-1">
+    
+            {% for funcao, detalhes in funcoes['adm'].items() %}
+
+            <a href="{{url_for('cargos', cargo=detalhes[1])}}">
+
+                <div class="bg-white p-2 rounded card-cargo d-flex justify-content-between mb-2">
+                    <strong>{{funcao}}</strong>
+                    {% if detalhes[0] != 0 %}
+                    <span>{{detalhes[0]}}</span>
+                    {% else %}
+                    <span>-</span>
+                    {% endif %}
+                </div>
+            </a>
+
+            {% endfor %}
+    
+        </div>
+
+        <div id="cargos" class="col col-11 mb-4 p-1">
+    
+            {% for funcao, detalhes in funcoes['cargos'].items() %}
+
+            <a href="{{url_for('cargos', cargo=detalhes[1])}}">
+
+                <div class="bg-white p-2 rounded card-cargo d-flex justify-content-between mb-2">
+                    <strong>{{funcao}}</strong>
+                    {% if detalhes[0] != 0 %}
+                    <span>{{detalhes[0]}}</span>
+                    {% else %}
+                    <span>-</span>
+                    {% endif %} 
+                </div>
+            <a href="{{url_for('cargos', cargo=detalhes[1])}}">    
+            {% endfor %}
+    
+        </div>
+    </div>
+    
+</div>
+{% endblock %}
+

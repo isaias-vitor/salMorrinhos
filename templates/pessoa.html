@@ -1,0 +1,374 @@
+{% extends 'bases/base.html' %}
+
+{% block content %}
+
+<div class="container sticky-top mt-5">
+
+    <div class="row justify-content-between">
+        <!-- <div class="voltar col-auto">
+            <a href="">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+        </div> -->
+        <h3 class="text-center">{{ pessoa }}</h3>
+    </div>
+
+    <div class="container mt-5">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="responsabilidades-tab" data-bs-toggle="tab" data-bs-target="#responsabilidades" type="button" role="tab" aria-controls="responsabilidades" aria-selected="true">Responsabilidades</button>
+            </li>
+            <!-- <li class="nav-item" role="presentation">
+                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Profile</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Contact</button>
+            </li> -->
+        </ul>
+    
+        <!-- Tab content -->
+        <div class="tab-content bg-white border border-top-0 p-3" id="myTabContent">
+            <div class="tab-pane fade show active" id="responsabilidades" role="tabpanel" aria-labelledby="responsabilidades-tab">
+                <div class="d-flex justify-content-end mt-3">
+                    <button class="btn btn-light btn-sm col-auto" data-bs-toggle="modal" data-bs-target="#modal">
+                        Adicionar
+                    </button>
+                </div>
+                <div class="tabela-home table-responsive justify-content-center p-lg-5 p-2 bg-white rounded ">
+                    <table class="table table-bordered table-sm mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col">Cargo/Ministério</th>
+                                <th scope="col" class="text-center">Comum</th>
+                                <th scope="col" class="text-center">Setor</th>
+                                <th scope="col" class="text-center">Cidade</th>
+                                <th scope="col" class="text-center">Observações</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>  
+                        <tbody class="table-group-divider">
+                            {% for resp in responsabilidades %}
+                                <tr>
+                                    <td class="text-nowrap">{{resp.cargo}}</td>
+                                    <td class="text-center text-nowrap" onclick="window.location=`{{url_for('comum', nome_comum=resp.comum)}}`">{{resp.comum}}</td>
+                                    <td class="text-center text-nowrap">{{resp.setor}}</td>
+                                    <td class="text-center text-nowrap">{{resp.cidade}}</td>
+                                    {% if resp.observacao %}
+                                        <td class="text-center text-nowrap">{{resp.observacao}}</td>
+                                    {% else %}
+                                        <td class="text-center text-nowrap">-</td>
+                                    {% endif %}
+                                    <td class="text-center col-auto">
+                                        <button class="btn" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#modal-edit" 
+                                        data-cargo="{{resp.cargo}}"
+                                        data-comum="{{resp.comum}}"
+                                        data-setor="{{resp.setor}}"
+                                        data-cidade="{{resp.cidade}}"
+                                        data-id="{{resp.id_resp}}">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </button>
+                                    </td>
+                                    <td class="text-center col-auto">
+                                        <button class="btn" data-id_resp="{{resp.id_resp}}" data-bs-toggle="modal"  data-bs-target="#modal-delete">
+                                            <i class="bi bi-x-lg"></i></td>
+                                        </button>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <p>Conteúdo da aba Profile.</p>
+            </div>
+            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                <p>Conteúdo da aba Contact.</p>
+            </div>
+        </div>
+    </div>
+    
+
+</div>
+
+
+    {% block modal %}
+    <!-- Modal -->
+    <div class="modal" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content border-0">
+                <div class="modal-body">
+                    <div class="mb-4 d-flex justify-content-between">
+                        <h4 class="modal-title d-inline" id="modalLabel">Adicionar Responsabilidade</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="POST">
+
+                        {{ form.hidden_tag() }}
+
+                        
+                        <label for="tipoCargoVoluntario" class="col-form-label">Tipo de Cargo</label>
+                        {{ form.tipo_cargo(id="tipoCargoVoluntario", class="form-select") }}
+                    
+                        <label for="cargoVoluntario" class="col-form-label mt-3">Cargo</label>
+                        {{ form.cargo(id="cargoVoluntario", class="form-select") }}
+                        
+                        <label for="setorVoluntario" class="col-form-label mt-3">Setor</label>
+                        {{ form.setor(id="setorVoluntario", class="form-select") }}
+                        
+                        <label for="cidadeVoluntario" class="col-form-label mt-3">Cidade</label>
+                        {{ form.cidade(id="cidadeVoluntario", class="form-select") }}
+                        
+                        <label for="comumVoluntario" class="col-form-label mt-3">Comum</label>
+                        {{ form.comum(id="comumVoluntario", class="form-select") }}
+
+                        <label for="obsVoluntario" class="col-form-label mt-3">Observações</label>
+                        {{ form.obs(id="obsVoluntario", class="form-control") }}
+                        
+                        <div class="d-flex justify-content-center mb-1 mt-4">
+                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">Cancelar</button>
+                            {{ form.submit(id="salvar", class="btn btn-outline-secondary", value="Adicionar Responsabilidade") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% endblock %}
+    
+    <div class="modal" id="modal-edit" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content border-0">
+                <div class="modal-body" id="form-edit">
+                    <div class="mb-4 d-flex justify-content-between">
+                        <h5 class="modal-title d-inline" id="modalLabel">Editar Informações</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    
+                    <form method="post">
+
+                        {{ form_edit.hidden_tag() }}
+
+                        {{ form_edit.id_resp(id="id_resp", class='d-none') }}
+                        {{ form_edit.resp_antiga(id="resp_antiga", class='d-none') }}
+
+                        <label for="tipoCargoVoluntarioEdit" class="col-form-label">Tipo de Cargo</label>
+                        {{ form_edit.tipo_cargo(id="tipoCargoVoluntarioEdit", class="form-select") }}
+                        
+                        <label for="cargoVoluntarioEdit" class="col-form-label mt-3">Cargo</label>
+                        {{ form_edit.cargo(id="cargoVoluntarioEdit", class="form-select") }}
+                        
+                        <label for="setorVoluntarioEdit" class="col-form-label mt-3">Setor</label>
+                        {{ form_edit.setor(id="setorVoluntarioEdit", class="form-select") }}
+                        
+                        <label for="cidadeVoluntarioEdit" class="col-form-label mt-3">Cidade</label>
+                        {{ form_edit.cidade(id="cidadeVoluntarioEdit", class="form-select") }}
+                        
+                        <label for="comumVoluntarioEdit" class="col-form-label mt-3">Comum</label>
+                        {{ form_edit.comum(id="comumVoluntarioEdit", class="form-select") }}
+
+                        <label for="obsVoluntarioEdit" class="col-form-label mt-3">Observações</label>
+                        {{ form_edit.obs(id="obsVoluntarioEdit", class="form-control") }}
+
+                        <div class="d-flex justify-content-center mb-1 mt-4">
+                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">Cancelar</button>
+                            {{ form.submit(id="editar", class="btn btn-outline-secondary", value="Editar Responsabilidade") }}
+                        </div>
+
+                    </form>
+                    
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal" id="modal-delete" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog border border-0 modal-sm">
+            <div class="modal-content border-0">
+                <div class="modal-body text-center id="form-delete">
+                    <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 4rem;"></i>
+
+                    <h3 class="mt-3">
+                        <strong>
+                            Remover Função
+                        </strong>
+                    </h3>
+
+                    <p>
+                        Deseja realmente remover esta função do voluntário?
+                    </p>
+                    
+                    <form method="post">
+
+                        {{ form_remove.hidden_tag() }}
+
+                        {{ form_remove.id_resp(id="id_resp_delete", class="d-none") }}
+
+                        <div class="d-flex justify-content-center mb-1 mt-5">
+                            <button type="button" class="btn btn-secondary rounded-5 me-2" data-bs-dismiss="modal">Cancelar</button>
+                            {{ form_remove.submit(class="btn btn-danger rounded-5") }}
+                        </div>
+                        
+
+                    </form>
+                    
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    {% block dynamic_select_igrejas %}
+<script>
+    const comuns = {{igrejas | tojson}}
+    const selectSetor = document.getElementById('setorVoluntario');
+    const selectSetorEdit= document.getElementById('setorVoluntarioEdit');
+    const selectCidade = document.getElementById('cidadeVoluntario');
+    const selectCidadeEdit = document.getElementById('cidadeVoluntarioEdit');
+    const selectComum = document.getElementById('comumVoluntario');
+    const selectComumEdit = document.getElementById('comumVoluntarioEdit');
+
+    selectSetor.addEventListener('change', ()=>{
+        const cidades = Object.keys(comuns[selectSetor.value]);
+        selectCidade.innerHTML = '';
+        cidades.forEach((cidade) => {
+            const option = document.createElement('option');
+            option.value = cidade;
+            option.textContent = cidade;
+            selectCidade.appendChild(option);
+        });
+    });
+
+    selectSetorEdit.addEventListener('change', ()=>{
+        const cidades = Object.keys(comuns[selectSetor.value]);
+        selectCidade.innerHTML = '';
+        cidades.forEach((cidade) => {
+            const option = document.createElement('option');
+            option.value = cidade;
+            option.textContent = cidade;
+            selectCidade.appendChild(option);
+        });
+    });
+
+    selectCidade.addEventListener('change', ()=>{
+        const cidades = comuns[selectSetor.value][selectCidade.value];
+        selectComum.innerHTML = '';
+        cidades.forEach((comum) => {
+            const option = document.createElement('option');
+            option.value = comum;
+            option.textContent = comum;
+            selectComum.appendChild(option)
+        });
+    })
+
+    selectCidadeEdit.addEventListener('change', ()=>{
+        const cidades = comuns[selectSetorEdit.value][selectCidadeEdit.value];
+        selectComumEdit.innerHTML = '';
+        cidades.forEach((comum) => {
+            const option = document.createElement('option');
+            option.value = comum;
+            option.textContent = comum;
+            selectComumEdit.appendChild(option)
+        });
+    })
+
+    const dictCargos = {{cargos | tojson}}
+    const selectTipoCargoEdit = document.getElementById('tipoCargoVoluntarioEdit')
+    const selectTipoCargo = document.getElementById('tipoCargoVoluntario')
+    const selectCargoEdit = document.getElementById('cargoVoluntarioEdit')
+    const selectCargo = document.getElementById('cargoVoluntario')
+
+    selectTipoCargo.addEventListener('change', ()=>{
+        const listaCargos = dictCargos[selectTipoCargo.value];
+        selectCargo.innerHTML = '';
+        listaCargos.forEach((cargo) => {
+            const option = document.createElement('option');
+            option.value = cargo;
+            option.textContent = cargo;
+            selectCargo.appendChild(option);
+        });
+    });
+
+    selectTipoCargoEdit.addEventListener('change', ()=>{
+        const listaCargos = dictCargos[selectTipoCargoEdit.value];
+        selectCargoEdit.innerHTML = '';
+        listaCargos.forEach((cargo) => {
+            const option = document.createElement('option');
+            option.value = cargo;
+            option.textContent = cargo;
+            selectCargoEdit.appendChild(option);
+        });
+    });
+
+
+    // Preenchimento de modal para edição de responsabilidades
+    const modalEdit = document.getElementById('modal-edit');
+    modalEdit.addEventListener('show.bs.modal', function (event) {
+        const botao = event.relatedTarget; // Botão que acionou o modal
+        const cargo = botao.getAttribute('data-cargo'); 
+        const comum = botao.getAttribute('data-comum');
+        const setor = botao.getAttribute('data-setor');
+        const cidade = botao.getAttribute('data-cidade');
+        const id = botao.getAttribute('data-id');
+        
+        const listaCargosEdit = procuraListaCargo(cargo)
+        const listaComunsEdit = comuns[setor][cidade]
+        console.log(listaComunsEdit)
+        selectCargoEdit.innerHTML = ''
+        
+        // Inserir os dados no modal
+        document.getElementById('tipoCargoVoluntarioEdit').value = procuraTipoCargo(cargo);
+        document.getElementById('cargoVoluntarioEdit').value = cargo;
+        document.getElementById('setorVoluntarioEdit').value = setor;
+        document.getElementById('cidadeVoluntarioEdit').value = cidade;
+        document.getElementById('comumVoluntarioEdit').value = comum;
+        document.getElementById('obsVoluntarioEdit').value = '';
+        document.getElementById('id_resp').value = id;
+        document.getElementById('resp_antiga').value = document.getElementById('cargoVoluntarioEdit').value;
+
+        listaCargosEdit.forEach((optionCargo) => {
+            const option = document.createElement('option');
+            option.value = optionCargo;
+            option.textContent = optionCargo;
+            selectCargoEdit.appendChild(option);
+        });
+        
+
+        listaComunsEdit.forEach((optionCargo) => {
+            const option = document.createElement('option');
+            option.value = optionCargo;
+            option.textContent = optionCargo;
+            selectComumEdit.appendChild(option);
+        });
+        
+    });
+    function procuraTipoCargo(cargo){
+        for(tipo in dictCargos){
+            if(dictCargos[tipo].includes(cargo)) return tipo;
+        }
+    }
+    function procuraListaCargo(cargo){
+        for(tipo in dictCargos){
+            if(dictCargos[tipo].includes(cargo)) return dictCargos[tipo];
+        }
+    }
+
+
+    // Preenchimento de modal para exclusão de responsabilidades
+    const modalRemove = document.getElementById('modal-delete');
+    modalRemove.addEventListener('show.bs.modal', function (event) {
+        const botao = event.relatedTarget; // Botão que acionou o modal
+        const id = botao.getAttribute('data-id_resp');
+        document.getElementById('id_resp_delete').value = id
+    });
+
+</script>
+{% endblock %}
+
+{% endblock %}
