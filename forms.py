@@ -1,6 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, SubmitField, IntegerField,TextAreaField, HiddenField
+from wtforms import StringField, SelectField, SubmitField, IntegerField,TextAreaField, HiddenField, PasswordField
 from wtforms.validators import DataRequired, Length
+
+class Login(FlaskForm):
+    usuario = StringField('Usuário', validators=[DataRequired()]) 
+    senha = PasswordField('Senha', validators=[DataRequired()]) 
+    submit = SubmitField('Entrar')
 
 class AdicionaCargos(FlaskForm):
     nome = StringField('Nome', validators=[DataRequired(), Length(min=5, max=256)])

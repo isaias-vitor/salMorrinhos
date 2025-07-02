@@ -1,4 +1,6 @@
-
+*{
+    box-sizing: border-box;
+}
 
 body{
     background-color: rgba(241, 241, 241, 0.76);
@@ -22,7 +24,7 @@ td, .card-cargos{
     vertical-align: middle;
 }
 
-#logo{
+#logo, #logo_login{
     font-family: Nunito;
 }
 

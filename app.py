@@ -3,15 +3,62 @@ import forms
 from os import getenv
 from database import *
 from dotenv import load_dotenv
+from flask_login import LoginManager, login_user, login_required, logout_user, UserMixin, current_user
 
-load_dotenv
+load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = getenv('SECRET_KEY_APP')
 db = SupabaseClient()
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+USERS = {
+    'admin': {'password': '1234'}
+}
+
+class User(UserMixin):
+    def __init__(self, username):
+        self.id = username
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    if user_id in USERS:
+        return User(user_id)
+    return None
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form_login = forms.Login()
+
+    if form_login.validate_on_submit():
+        username = form_login.usuario.data
+        password = form_login.senha.data
+
+
+        user = USERS.get(username)
+        if user and user['password'] == password:
+            user_obj = User(username)
+            login_user(user_obj)
+            flash('Login realizado com sucesso!', 'success')
+            next_page = request.args.get('next')
+            return redirect(next_page or url_for('index'))
+        else:
+            flash('Usuário ou senha inválidos!')
+
+    return render_template('login.html', form=form_login)
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    flash('Você saiu com sucesso!', 'infor')
+    return redirect(url_for('login'))
 
 @app.route("/")
+@login_required
 def index():
     funcoes = {
         'palavra': {
@@ -57,6 +104,7 @@ def index():
 
 
 @app.route('/cargos/<string:cargo>', methods=['GET', 'POST'])
+@login_required
 def cargos(cargo):
     lista_voluntarios = db.buscar_cargo(cargo)
     # lista_voluntarios = sorted(db.buscar_cargo(cargo), key = lambda x: x['nome'])
@@ -91,6 +139,7 @@ def cargos(cargo):
 
 
 @app.route('/pessoas/<string:pessoa>', methods=['GET', 'POST'])
+@login_required
 def pessoas(pessoa):
     lista_responsabilidades = db.buscar_cargos_pessoa(pessoa) 
 
@@ -129,7 +178,7 @@ def pessoas(pessoa):
             'Auxiliar de Escrita (RJM)',
             'Preventiva',
             'Auxiliar do Som',
-            'Auxiliar do Som (RJM)'
+            'Auxiliar do Som (RJM)',
             'Brigadista',
             'Monitor de Segurança',
             'Auxiliar de Corredores',
@@ -172,6 +221,7 @@ def pessoas(pessoa):
 
 
 @app.route('/comuns', methods=['GET', 'POST'])
+@login_required
 def comuns():
     comuns = sorted(db.buscar_comuns(), key = lambda x: x['nome'])
 
@@ -198,6 +248,7 @@ def comuns():
 
 
 @app.route('/comum/<string:nome_comum>')
+@login_required
 def comum(nome_comum):
     dados_comum = db.buscar_comum(nome_comum)
     cargos_comum = db.buscar_cargos_comum(nome_comum)

@@ -52,24 +52,31 @@
       <a class="navbar-brand fw-bold fs-5" id="logo" href="{{ url_for('index') }}">SAL</a>
 
       <!-- Botão do menu mobile -->
-      <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      <button class="navbar-toggler d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Alternar navegação">
         <span class="navbar-toggler-icon"></span>
-      </button> -->
+      </button>
 
       <!-- Menu colapsável -->
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item me-3 menu-selecionado">
-            <a class="nav-link" href="#">Roxo Verde</a>
+      <div class="collapse navbar-collapse mt-5" id="navbarSupportedContent">
+        <ul class="navbar-nav d-sm-none me-auto mb-2 mb-lg-0 aling-self-start">
+          <li class="nav-item me-3 text-end">
+            <a class="nav-link" href="{{ url_for('index') }}">Funções</a>
+          </li>
+          <li class="nav-item me-3 text-end">
+            <a class="nav-link" href="{{ url_for('comuns') }}">Comuns</a>
           </li>
         </ul>
-        <div class="d-flex align-items-center">
-          <i class="bi bi-bell me-3"></i>
-          <i class="bi bi-gear me-3"></i>
-          <img src="https://img.freepik.com/psd-premium/rosto-de-um-jovem-empresario-persa-bonito-em-um-terno-pensando-isolado-em-um-fundo-transparente_1233986-270.jpg" width="30" class="rounded-circle">
+        <div class="align-self-center">
+          <hr class="hr">
         </div>
+        <ul class="navbar-nav d-sm-none me-auto mb-2 mb-lg-0 aling-self-end">
+          <li class="nav-item me-3 text-end">
+            <a class="nav-link align-self-end text-end" href="{{url_for('logout')}}">Sair</a>
+          </li>
+        </ul>
       </div>
+
     </div>
   </nav>
 
