@@ -58,6 +58,10 @@ td, .card-cargos{
     color: #FFF !important;
 }
 
+.full-vh {
+    height: calc(var(--vh, 1vh) * 70);
+  }
+
 .nav-top{
     font-family: 'PT Sans';
 }
