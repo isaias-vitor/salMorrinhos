@@ -51,14 +51,14 @@
                         <tbody class="table-group-divider">
                             {% for resp in responsabilidades %}
                                 <tr>
-                                    <td class="text-nowrap">{{resp.cargo}}</td>
-                                    <td class="text-center text-nowrap" onclick="window.location=`{{url_for('comum', nome_comum=resp.comum)}}`">{{resp.comum}}</td>
-                                    <td class="text-center text-nowrap">{{resp.setor}}</td>
-                                    <td class="text-center text-nowrap">{{resp.cidade}}</td>
+                                    <td class="text-nowrap px-2">{{resp.cargo}}</td>
+                                    <td class="text-center text-nowrap px-2" onclick="window.location=`{{url_for('comum', nome_comum=resp.comum)}}`">{{resp.comum}}</td>
+                                    <td class="text-center text-nowrap px-2">{{resp.setor}}</td>
+                                    <td class="text-center text-nowrap px-2">{{resp.cidade}}</td>
                                     {% if resp.observacao %}
-                                        <td class="text-center text-nowrap">{{resp.observacao}}</td>
+                                        <td class="text-center text-nowrap px-2">{{resp.observacao}}</td>
                                     {% else %}
-                                        <td class="text-center text-nowrap">-</td>
+                                        <td class="text-center text-nowrap px-2">-</td>
                                     {% endif %}
                                     <td class="text-center col-auto">
                                         <button class="btn" 
@@ -74,8 +74,9 @@
                                     </td>
                                     <td class="text-center col-auto">
                                         <button class="btn" data-id_resp="{{resp.id_resp}}" data-bs-toggle="modal"  data-bs-target="#modal-delete">
-                                            <i class="bi bi-x-lg"></i></td>
+                                            <i class="bi bi-x-lg"></i>
                                         </button>
+                                    </td>
                                 </tr>
                             {% endfor %}
                         </tbody>

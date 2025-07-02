@@ -29,11 +29,11 @@
             <tbody class="table-group-divider">
                 {% for comum in comuns %}
                     <tr onclick="window.location=`{{url_for('comum', nome_comum=comum.nome)}}`">
-                        <td class="text-nowrap" scope="col">{{ comum.nome }}</td>
-                        <td class="text-nowrap text-center" scope="col">{{ comum.cidade }}</td>
-                        <td class="text-nowrap text-center" scope="col">{{ comum.setor }}</td>
-                        <td class="text-nowrap text-center" scope="col">{{ comum.zona }}</td>
-                        <td class="text-nowrap text-end" scope="col">{{ comum.tipo }}</td>
+                        <td class="text-nowrap px-2" scope="col">{{ comum.nome }}</td>
+                        <td class="text-nowrap text-center px-2" scope="col">{{ comum.cidade }}</td>
+                        <td class="text-nowrap text-center px-2" scope="col">{{ comum.setor }}</td>
+                        <td class="text-nowrap text-center px-2" scope="col">{{ comum.zona }}</td>
+                        <td class="text-nowrap text-end px-2" scope="col">{{ comum.tipo }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
