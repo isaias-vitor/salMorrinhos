@@ -1,4 +1,4 @@
-{% extends 'bases/base.html' %}
+{% extends 'bases/base_lista_cargos.html' %}
 
 {% block content %}
 
@@ -21,11 +21,11 @@
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="geral-tab" data-bs-toggle="tab" data-bs-target="#geral" type="button" role="tab" aria-controls="geral" aria-selected="true">Geral</button>
             </li>
-            <!-- <li class="nav-item" role="presentation">
-                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Profile</button>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Encargos Locais</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Contact</button> -->
+                <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Música</button>
             </li>
         </ul>
     
@@ -70,7 +70,11 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                <p>Conteúdo da aba Profile.</p>
+                {% block lista_cargos %}
+                    {% block rows %}
+                        
+                    {% endblock %}
+                {% endblock %}
             </div>
             <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
                 <p>Conteúdo da aba Contact.</p>

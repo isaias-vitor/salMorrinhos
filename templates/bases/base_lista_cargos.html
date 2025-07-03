@@ -35,6 +35,15 @@
                 </thead>  
                 <tbody class="table-group-divider">
                     {% block rows %}
+                        {% for voluntario in lista_voluntarios %}
+                            <tr onclick="window.location=`{{url_for('pessoas', pessoa=voluntario.id)}}`">
+                                <td class="px-2">{{loop.index}}</td>
+                                <td class="text-nowrap px-2">{{voluntario.nome}}</td>
+                                <td class="text-nowrap px-2">{{voluntario.cidade}}</td>
+                                <td class="text-nowrap px-2">{{voluntario.comum}}</td>
+                                <td class="text-nowrap px-2">{{voluntario.setor}}</td>
+                            </tr>
+                        {% endfor %}
                     {% endblock %}
                 </tbody>
             </table>

@@ -47,13 +47,14 @@ def login():
             next_page = request.args.get('next')
             return redirect(next_page or url_for('index'))
         else:
-            flash('Usuário ou senha inválidos!')
+            flash('Usuário ou senha inválidos!', 'danger')
 
     return render_template('login.html', form=form_login)
 
 @app.route('/logout')
 def logout():
     logout_user()
+    session.clear()
     flash('Você saiu com sucesso!', 'infor')
     return redirect(url_for('login'))
 
@@ -135,6 +136,7 @@ def cargos(cargo):
 
         return redirect(url_for('cargos', cargo=cargo))
 
+    print(lista_voluntarios)
     return render_template('voluntarios.html', lista_voluntarios=lista_voluntarios, form=form, titulo=db.cargos(int(cargo)), igrejas=lista_igrejas)
 
 
@@ -250,6 +252,7 @@ def comuns():
 @app.route('/comum/<string:nome_comum>')
 @login_required
 def comum(nome_comum):
+    
     dados_comum = db.buscar_comum(nome_comum)
     cargos_comum = db.buscar_cargos_comum(nome_comum)
     return(render_template('comum.html', nome_comum=nome_comum, dados_comum=dados_comum, cargos_comum=cargos_comum))
