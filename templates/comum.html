@@ -71,18 +71,19 @@
             </div>
             <div class="tab-pane fade show active" id="enc_locais" role="tabpanel" aria-labelledby="enc_locais-tab">
                 <div class="col-12 col-lg-4 justify-content-center">
-                    <select id="campoPesquisa" class="form-select">
+                    <select id="campoPesquisaEncargosLocais" class="form-select">
                         <option value="">Todos</option>
                         <option value="Auxiliar de Escrita">Auxiliares de Escrita</option>
                         <option value="Auxiliar de Escrita (RJM)">Auxiliares de Escrita (RJM)</option>
                         <option value="Auxiliar de Jovens">Auxiliares de Jovens</option>
-                        <option value="Auxiliar do Som">Auxiliares do Som</option>
-                        <option value="Auxiliar do Som (RJM)">Auxiliares do Som (RJM)</option>
-                        <option value="Brigadistas">Brigadistas</option>
+                        <option value="Auxiliar de Som">Auxiliares de Som</option>
+                        <option value="Auxiliar de Som (RJM)">Auxiliares de Som (RJM)</option>
+                        <option value="Brigadista">Brigadistas</option>
                         <option value="Monitor de Segurança">Monitores de Segurança</option>
                         <option value="Porteiro">Porteiros</option>
                         <option value="Preventiva">Preventiva</option>
                         <option value="Recepcionista">Recepcionistas</option>
+                        <option value="Recepcionista (RJM)">Recepcionistas (RJM)</option>
                     </select>
                 </div>
                 <div class="tabela-home table-responsive justify-content-center p-lg-5 p-2 border bg-white rounded mt-3">
@@ -107,16 +108,60 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                <p>Conteúdo da aba Contact.</p>
+                <div class="col-12 col-lg-4 justify-content-center">
+                    <select id="campoPesquisaMusica" class="form-select">
+                        <option value="">Todos</option>
+                        <option value="Encarregado Regional">Encarregados Regionais</option>
+                        <option value="Encarregado Local">Encarregado Local</option>
+                        <option value="Examinadora">Examninadoras</option>
+                        <option value="Instrutores">Instrutores</option>
+                        <option value="Instrutoras">Instrutoras</option>
+                        <option value="Secretário do GEM">Secretários do GEM</option>
+                    </select>
+                </div>
+                <div class="tabela-home table-responsive justify-content-center p-lg-5 p-2 border bg-white rounded mt-3">
+                    <table class="table table-hover table-bordered table-sm mb-0 table-borderless">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Cargo</th>
+                            </tr>
+                        </thead> 
+                        {% for funcao in cargos_comum.musica %}
+                            {% for voluntario in cargos_comum.musica[funcao] %}
+                                <tr onclick="window.location=`{{url_for('pessoas', pessoa=voluntario.id)}}`">
+                                    <td class="px-2">{{loop.index}}</td>
+                                    <td class="text-nowrap px-2">{{voluntario.nome}}</td>
+                                    <td class="text-nowrap px-2" class="funcao">{{voluntario.funcao}}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // Quando alguém altera o campo de pesquisa
-    document.getElementById('campoPesquisa').onchange = function() {
-        let texto = document.getElementById('campoPesquisa').value;
+    // Quando alguém altera o filtro dos encargos locais
+    document.getElementById('campoPesquisaEncargosLocais').onchange = function() {
+        let texto = document.getElementById('campoPesquisaEncargosLocais').value;
+        let linhas = document.getElementsByTagName('tr');
+        
+        for(let linha of linhas) {
+            // Se o texto da linha contém o que foi digitado
+            if(linha.innerText.toLowerCase().includes(texto.toLowerCase())) {
+                linha.style.display = '';
+            } else {
+                linha.style.display = 'none';
+            }
+        }
+    }
+    // Quando alguém altera o filtro da parte musical
+    document.getElementById('campoPesquisaMusica').onchange = function() {
+        let texto = document.getElementById('campoPesquisaMusica').value;
         let linhas = document.getElementsByTagName('tr');
         
         for(let linha of linhas) {

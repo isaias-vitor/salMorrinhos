@@ -136,7 +136,6 @@ def cargos(cargo):
 
         return redirect(url_for('cargos', cargo=cargo))
 
-    print(lista_voluntarios)
     return render_template('voluntarios.html', lista_voluntarios=lista_voluntarios, form=form, titulo=db.cargos(int(cargo)), igrejas=lista_igrejas)
 
 
@@ -200,7 +199,8 @@ def pessoas(pessoa):
             db.inserir_responsabilidade(
                 id_pessoa = pessoa,
                 nome_comum = form.comum.data,
-                nome_cargo = form.cargo.data
+                nome_cargo = form.cargo.data,
+                nome_cidade = form.cidade.data
             )
         elif formulario == 'Editar Responsabilidade':
             db.editar_responsabilidade(
@@ -212,13 +212,11 @@ def pessoas(pessoa):
                 resp_antiga = form_edit.resp_antiga.data
             )
         elif formulario == 'Remover':
-            print(form_remove.id_resp.data)
             db.remover_responsabilidade(form_remove.id_resp.data)
 
         return redirect(url_for('pessoas', pessoa=pessoa))
     
 
-    print(lista_responsabilidades)
     return render_template('pessoa.html', pessoa=nome_pessoa, responsabilidades=lista_responsabilidades, form=form, cargos=cargos, igrejas=igrejas, form_edit=form_edit, form_remove=form_remove)
 
 
@@ -289,11 +287,6 @@ def comum(nome_comum):
     dados_comum = db.buscar_comum(nome_comum)
     cargos_comum = db.buscar_cargos_comum(nome_comum)
 
-    # print(cargos_comum['enc_locais'])
-
-    for funcao in cargos_comum['enc_locais']:
-        print(cargos_comum['enc_locais'][funcao])
-
     return(render_template('comum.html', nome_comum=nome_comum, dados_comum=dados_comum, cargos_comum=cargos_comum))
 
 
@@ -306,7 +299,7 @@ def lista_igrejas():
         if igreja['cidade'] not in lista_igrejas[igreja['setor']]:
             lista_igrejas[igreja['setor']].setdefault(igreja['cidade'], [])
         lista_igrejas[igreja['setor']][igreja['cidade']].append(igreja['nome'])
-    
+            
     return lista_igrejas
 
 if __name__ == "__main__":

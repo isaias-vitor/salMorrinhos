@@ -134,10 +134,10 @@ class SupabaseClient:
             print('Erro ao inserir no banco de dados!')
             return None
 
-    def inserir_responsabilidade(self, id_pessoa, nome_comum, nome_cargo):
+    def inserir_responsabilidade(self, id_pessoa, nome_comum, nome_cargo, nome_cidade):
         try:
             # Inserção na tabela de responsabilidades
-            id_comum = self.client.table('comuns').select('id').eq('nome', nome_comum).execute()
+            id_comum = self.client.table('comuns').select('id').eq('nome', nome_comum).eq('cidade', nome_cidade).execute()
             id_comum = id_comum.data[0]['id']
             id_funcao = self.cargos(nome_cargo)
             insercao = self.client.table('responsabilidades').insert({
@@ -160,12 +160,9 @@ class SupabaseClient:
 
     def buscar_cargo(self, cargo): 
         try:
-            # if cargo == 'locals':
-            #     respons = self.client.table('voluntarios').select('id', 'nome', 'comum', 'cidade', 'setor').
             respons = self.client.table('voluntarios').select('id', 'nome', 'comum', 'cidade', 'setor').contains('funcoes', [cargo]).execute()
             return respons.data
-        except:
-            
+        except:     
             print('Erro ao buscar na tabela')
             return None
         
@@ -186,7 +183,7 @@ class SupabaseClient:
             return None
 
     def buscar_cargos_comum(self, nome_comum):
-        # try:
+        try:
             busca_id = self.client.table('comuns').select('id').eq('nome', nome_comum).execute()
             busca_id = busca_id.data[0]['id']   
             busca = self.client.table('responsabilidades').select('*').eq('id_comum', busca_id).execute()
@@ -263,9 +260,9 @@ class SupabaseClient:
                     case 28: lista_cargos['enc_locais']['porteiros_rjm'].append(dados)
                     case 29: lista_cargos['enc_locais']['recepcionistas_rjm'].append(dados)
             return lista_cargos
-        # except:
-        #     print('Erro ao buscar!')
-        #     return None
+        except:
+            print('Erro ao buscar!')
+            return None
 
     def buscar_cargos_pessoa(self, id_pessoa):
         try:
@@ -342,7 +339,6 @@ class SupabaseClient:
             busca = busca.data[0]['funcoes']
             if id_resp_antiga in busca: busca.remove(id_resp_antiga)
             busca.append(id_resp_atual)
-            print(busca)
             self.client.table('voluntarios').update({'funcoes':busca}).eq('id', id_pessoa).execute()
         except:
             print('Erro ao atualizar!')
