@@ -252,9 +252,48 @@ def comuns():
 @app.route('/comum/<string:nome_comum>')
 @login_required
 def comum(nome_comum):
+    cargos = {
+        'Música':[
+            'Encarregado Regional',
+            'Encarregado Local',
+            'Examinadora',
+            'Instrutor',
+            'Instrutora',
+            'Secretário do GEM',
+        ],
+        'Administração':[
+            'Secretário do Setor',
+            'Acessor Administrativo',
+            'Conselho Fiscal',
+            'Engenharia',
+            'Conselho Jurídico',
+        ],
+        'Encargos Locais':[
+            'Auxiliar de Jovens',
+            'Porteiro',
+            'Porteiro (RJM)',
+            'Recepcionista',
+            'Recepcionista (RJM)',
+            'Auxiliar de Escrita',
+            'Auxiliar de Escrita (RJM)',
+            'Preventiva',
+            'Auxiliar do Som',
+            'Auxiliar do Som (RJM)',
+            'Brigadista',
+            'Monitor de Segurança',
+            'Auxiliar de Corredores',
+            'Patrimônio',
+        ]
+    }
     
     dados_comum = db.buscar_comum(nome_comum)
     cargos_comum = db.buscar_cargos_comum(nome_comum)
+
+    # print(cargos_comum['enc_locais'])
+
+    for funcao in cargos_comum['enc_locais']:
+        print(cargos_comum['enc_locais'][funcao])
+
     return(render_template('comum.html', nome_comum=nome_comum, dados_comum=dados_comum, cargos_comum=cargos_comum))
 
 

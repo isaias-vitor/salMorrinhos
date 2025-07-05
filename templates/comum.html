@@ -19,10 +19,10 @@
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="geral-tab" data-bs-toggle="tab" data-bs-target="#geral" type="button" role="tab" aria-controls="geral" aria-selected="true">Geral</button>
+                <button class="nav-link" id="geral-tab" data-bs-toggle="tab" data-bs-target="#geral" type="button" role="tab" aria-controls="geral" aria-selected="true">Geral</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Encargos Locais</button>
+                <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#enc_locais" type="button" role="tab" aria-controls="profile" aria-selected="false">Encargos Locais</button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Música</button>
@@ -31,27 +31,27 @@
     
         <!-- Tab content -->
         <div class="tab-content bg-white border border-top-0 p-3" id="myTabContent">
-            <div class="tab-pane fade show active" id="geral" role="tabpanel" aria-labelledby="geral-tab">
+            <div class="tab-pane fade" id="geral" role="tabpanel" aria-labelledby="geral-tab">
                 <div class="d-flex mt- justify-content-between">
                     <div class="col-5">
                         <h5 class="text-center mb-4">Ministério</h5>
-                        {% for anciao in cargos_comum.anciaes%}
+                        {% for anciao in cargos_comum.ministerio.anciaes%}
                             <p><strong>Ancião: </strong> <a href="{{ url_for('pessoas', pessoa=anciao.id) }}">{{ anciao.nome }}</a> </p>
                         {% endfor %}
-                        {% for diacono in cargos_comum.diaconos%}
+                        {% for diacono in cargos_comum.ministerio.diaconos%}
                             <p><strong>Diácono: </strong> <a href="{{ url_for('pessoas', pessoa=diacono.id) }}"> {{ diacono.nome}} </a></p>
                         {% endfor %}
-                        {% for coop_oficial in cargos_comum.coop_oficiais%}
+                        {% for coop_oficial in cargos_comum.ministerio.coop_oficiais%}
                             <p><strong>Cooperador de Ofício Ministerial: </strong> <a href="{{ url_for('pessoas', pessoa=coop_oficial.id) }}"> {{ coop_oficial.nome }} </a></p>
                         {% endfor %}
-                        {% for coop_jovens in cargos_comum.coop_jovens%}
+                        {% for coop_jovens in cargos_comum.ministerio.coop_jovens%}
                             <p><strong>Cooperador de Jovens e Menores: </strong> <a href="{{ url_for('pessoas', pessoa=coop_jovens.id) }}">{{ coop_jovens.nome }} </a></p>
                         {% endfor %}
-                        {% for enc_regional in cargos_comum.enc_regional%}
-                            <p><strong>Encarregado Regional: </strong> {{ enc_regional }} </p>
+                        {% for enc_regional in cargos_comum.musica.enc_regional%}
+                            <p><strong>Encarregado Regional: </strong> {{ enc_regionais }} </p>
                         {% endfor %}
-                        {% for enc_local in cargos_comum.enc_local%}
-                            <p><strong>Encarregado Local: </strong> {{ enc_local }} </p>
+                        {% for enc_local in cargos_comum.musica.enc_local%}
+                            <p><strong>Encarregado Local: </strong> {{ enc_locais }} </p>
                         {% endfor %}
                     </div>
                     <div class="col-5">
@@ -69,20 +69,65 @@
                     </div>
                 </div>
             </div>
-            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                {% block lista_cargos %}
-                    {% block rows %}
-                        
-                    {% endblock %}
-                {% endblock %}
+            <div class="tab-pane fade show active" id="enc_locais" role="tabpanel" aria-labelledby="enc_locais-tab">
+                <div class="col-12 col-lg-4 justify-content-center">
+                    <select id="campoPesquisa" class="form-select">
+                        <option value="">Todos</option>
+                        <option value="Auxiliar de Escrita">Auxiliares de Escrita</option>
+                        <option value="Auxiliar de Escrita (RJM)">Auxiliares de Escrita (RJM)</option>
+                        <option value="Auxiliar de Jovens">Auxiliares de Jovens</option>
+                        <option value="Auxiliar do Som">Auxiliares do Som</option>
+                        <option value="Auxiliar do Som (RJM)">Auxiliares do Som (RJM)</option>
+                        <option value="Brigadistas">Brigadistas</option>
+                        <option value="Monitor de Segurança">Monitores de Segurança</option>
+                        <option value="Porteiro">Porteiros</option>
+                        <option value="Preventiva">Preventiva</option>
+                        <option value="Recepcionista">Recepcionistas</option>
+                    </select>
+                </div>
+                <div class="tabela-home table-responsive justify-content-center p-lg-5 p-2 border bg-white rounded mt-3">
+                    <table class="table table-hover table-bordered table-sm mb-0 table-borderless">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Cargo</th>
+                            </tr>
+                        </thead> 
+                        {% for funcao in cargos_comum.enc_locais %}
+                            {% for voluntario in cargos_comum.enc_locais[funcao] %}
+                                <tr onclick="window.location=`{{url_for('pessoas', pessoa=voluntario.id)}}`">
+                                    <td class="px-2">{{loop.index}}</td>
+                                    <td class="text-nowrap px-2">{{voluntario.nome}}</td>
+                                    <td class="text-nowrap px-2" class="funcao">{{voluntario.funcao}}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    </table>
+                </div>
             </div>
             <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
                 <p>Conteúdo da aba Contact.</p>
             </div>
         </div>
     </div>
-    
-
 </div>
+
+<script>
+    // Quando alguém altera o campo de pesquisa
+    document.getElementById('campoPesquisa').onchange = function() {
+        let texto = document.getElementById('campoPesquisa').value;
+        let linhas = document.getElementsByTagName('tr');
+        
+        for(let linha of linhas) {
+            // Se o texto da linha contém o que foi digitado
+            if(linha.innerText.toLowerCase().includes(texto.toLowerCase())) {
+                linha.style.display = '';
+            } else {
+                linha.style.display = 'none';
+            }
+        }
+    }
+</script>
 
 {% endblock %}

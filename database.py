@@ -160,6 +160,8 @@ class SupabaseClient:
 
     def buscar_cargo(self, cargo): 
         try:
+            # if cargo == 'locals':
+            #     respons = self.client.table('voluntarios').select('id', 'nome', 'comum', 'cidade', 'setor').
             respons = self.client.table('voluntarios').select('id', 'nome', 'comum', 'cidade', 'setor').contains('funcoes', [cargo]).execute()
             return respons.data
         except:
@@ -184,78 +186,86 @@ class SupabaseClient:
             return None
 
     def buscar_cargos_comum(self, nome_comum):
-        try:
+        # try:
             busca_id = self.client.table('comuns').select('id').eq('nome', nome_comum).execute()
             busca_id = busca_id.data[0]['id']   
             busca = self.client.table('responsabilidades').select('*').eq('id_comum', busca_id).execute()
             lista_cargos = {
-                'anciaes':[],
-                'diaconos':[],
-                'coop_oficiais':[],
-                'coop_jovens':[],
-                'enc_regionais':[],
-                'enc_locais':[],
-                'examinadoras':[],
-                'instrutores':[],
-                'instrutoras':[],
-                'sec_gem':[],
-                'sec_setor':[],
-                'acessor_adm':[],
-                'cons_fiscal':[],
-                'engenharia':[],
-                'cons_juridico':[],
-                'brigadistas':[],
-                'porteiros':[],
-                'porteiros_rjm':[],
-                'recepcionistas':[],
-                'recepcionistas_rjm':[],
-                'aux_som':[],
-                'aux_som_rjm':[],
-                'aux_escrita':[],
-                'aux_escrita_rjm':[],
-                'preventiva':[],
-                'aux_corr':[],
-                'patrimonio':[],
-                'aux_jovens':[],
-                'monitor_seg':[],
+                'ministerio':{
+                    'anciaes':[],
+                    'diaconos':[],
+                    'coop_oficiais':[],
+                    'coop_jovens':[]
+                },
+                'musica':{
+                    'enc_regionais':[],
+                    'enc_locais':[],
+                    'examinadoras':[],
+                    'instrutores':[],
+                    'instrutoras':[],
+                    'sec_gem':[]
+                },
+                'adm':{
+                    'sec_setor':[],
+                    'acessor_adm':[],
+                    'cons_fiscal':[],
+                    'engenharia':[],
+                    'cons_juridico':[]
+                },
+                'enc_locais':{
+                    'brigadistas':[],
+                    'porteiros':[],
+                    'porteiros_rjm':[],
+                    'recepcionistas':[],
+                    'recepcionistas_rjm':[],
+                    'aux_som':[],
+                    'aux_som_rjm':[],
+                    'aux_escrita':[],
+                    'aux_escrita_rjm':[],
+                    'preventiva':[],
+                    'aux_corr':[],
+                    'patrimonio':[],
+                    'aux_jovens':[],
+                    'monitor_seg':[]
+                }
             }
             for voluntario in busca.data:
                 nome_voluntario = self.nomePessoa(int(voluntario['id_voluntario']))
-                dados = {'id':voluntario['id_voluntario'], 'nome':nome_voluntario}
+                dados = {'id':voluntario['id_voluntario'], 'nome':nome_voluntario, 'funcao':self.cargos(voluntario['funcao'])}
                 match voluntario['funcao']:
-                    case 1: lista_cargos['anciaes'].append(dados)
-                    case 2: lista_cargos['diaconos'].append(dados)
-                    case 3: lista_cargos['coop_oficiais'].append(dados)
-                    case 4: lista_cargos['coop_jovens'].append(dados)
-                    case 5: lista_cargos['enc_regionais'].append(dados)
-                    case 6: lista_cargos['enc_locais'].append(dados)
-                    case 7: lista_cargos['examinadoras'].append(dados)
-                    case 8: lista_cargos['instrutores'].append(dados)
-                    case 9: lista_cargos['instrutoras'].append(dados)
-                    case 10: lista_cargos['sec_gem'].append(dados)
-                    case 11: lista_cargos['sec_setor'].append(dados)
-                    case 12: lista_cargos['acessor_adm'].append(dados)
-                    case 13: lista_cargos['cons_fiscal'].append(dados)
-                    case 14: lista_cargos['brigadistas'].append(dados)
-                    case 15: lista_cargos['porteiros'].append(dados)
-                    case 16: lista_cargos['recepcionistas'].append(dados)
-                    case 17: lista_cargos['aux_som'].append(dados)
-                    case 18: lista_cargos['aux_escrita'].append(dados)
-                    case 19: lista_cargos['preventiva'].append(dados)
-                    case 20: lista_cargos['aux_corr'].append(dados)
-                    case 21: lista_cargos['patrimonio'].append(dados)
-                    case 22: lista_cargos['aux_jovens'].append(dados)
-                    case 23: lista_cargos['engenharia'].append(dados)
-                    case 24: lista_cargos['cons_juridico'].append(dados)
-                    case 25: lista_cargos['monitor_seg'].append(dados)
-                    case 26: lista_cargos['aux_som'].append(dados)
-                    case 27: lista_cargos['aux_escrita_rjm'].append(dados)
-                    case 28: lista_cargos['porteiros_rjm'].append(dados)
-                    case 29: lista_cargos['recepcionistas_rjm'].append(dados)
+                    case 1: lista_cargos['ministerio']['anciaes'].append(dados)
+                    case 2: lista_cargos['ministerio']['diaconos'].append(dados)
+                    case 3: lista_cargos['ministerio']['coop_oficiais'].append(dados)
+                    case 4: lista_cargos['ministerio']['coop_jovens'].append(dados)
+                    case 5: lista_cargos['musica']['enc_regionais'].append(dados)
+                    case 6: lista_cargos['musica']['enc_locais'].append(dados)
+                    case 7: lista_cargos['musica']['examinadoras'].append(dados)
+                    case 8: lista_cargos['musica']['instrutores'].append(dados)
+                    case 9: lista_cargos['musica']['instrutoras'].append(dados)
+                    case 10: lista_cargos['musica']['sec_gem'].append(dados)
+                    case 11: lista_cargos['adm']['sec_setor'].append(dados)
+                    case 12: lista_cargos['adm']['acessor_adm'].append(dados)
+                    case 13: lista_cargos['adm']['cons_fiscal'].append(dados)
+                    case 14: lista_cargos['enc_locais']['brigadistas'].append(dados)
+                    case 15: lista_cargos['enc_locais']['porteiros'].append(dados)
+                    case 16: lista_cargos['enc_locais']['recepcionistas'].append(dados)
+                    case 17: lista_cargos['enc_locais']['aux_som'].append(dados)
+                    case 18: lista_cargos['enc_locais']['aux_escrita'].append(dados)
+                    case 19: lista_cargos['enc_locais']['preventiva'].append(dados)
+                    case 20: lista_cargos['enc_locais']['aux_corr'].append(dados)
+                    case 21: lista_cargos['enc_locais']['patrimonio'].append(dados)
+                    case 22: lista_cargos['enc_locais']['aux_jovens'].append(dados)
+                    case 23: lista_cargos['enc_locais']['engenharia'].append(dados)
+                    case 24: lista_cargos['enc_locais']['cons_juridico'].append(dados)
+                    case 25: lista_cargos['enc_locais']['monitor_seg'].append(dados)
+                    case 26: lista_cargos['enc_locais']['aux_som'].append(dados)
+                    case 27: lista_cargos['enc_locais']['aux_escrita_rjm'].append(dados)
+                    case 28: lista_cargos['enc_locais']['porteiros_rjm'].append(dados)
+                    case 29: lista_cargos['enc_locais']['recepcionistas_rjm'].append(dados)
             return lista_cargos
-        except:
-            print('Erro ao buscar!')
-            return None
+        # except:
+        #     print('Erro ao buscar!')
+        #     return None
 
     def buscar_cargos_pessoa(self, id_pessoa):
         try:
@@ -319,8 +329,7 @@ class SupabaseClient:
         
 
     def editar_responsabilidade(self, id_pessoa, nome_comum, nome_cargo, id_resp, obs, resp_antiga):
-        # try:
-            print(f'--------------{id_resp}')
+        try:
             self.client.table('responsabilidades').update({
                 'id_comum':self.buscar_comum(nome_comum)['id'],
                 'id_voluntario':id_pessoa,
@@ -335,9 +344,9 @@ class SupabaseClient:
             busca.append(id_resp_atual)
             print(busca)
             self.client.table('voluntarios').update({'funcoes':busca}).eq('id', id_pessoa).execute()
-        # except:
-        #     print('Erro ao atualizar!')
-        #     return None
+        except:
+            print('Erro ao atualizar!')
+            return None
         
 
     def remover_responsabilidade(self, id_resp):
