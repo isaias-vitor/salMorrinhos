@@ -43,13 +43,11 @@ def login():
         users = db.usuarios()
         user = next((u for u in users if u['email'] == username), None)
 
-        print(user)
-
         if user and user['senha'] == password:
             user_obj = User(user['id'], user['nivel'])
+            session['nivel_acesso'] = user['nivel']
             login_user(user_obj)
             flash('Login realizado com sucesso!', 'success')
-            next_page = request.args.get('next')
             return redirect(url_for('index'))
         else:
             flash('Usuário ou senha inválidos!', 'danger')
@@ -60,6 +58,7 @@ def login():
 @login_required
 def logout():
     logout_user()
+    session.clear()
     flash('Você saiu com sucesso!', 'info')
     return redirect(url_for('login'))
 
