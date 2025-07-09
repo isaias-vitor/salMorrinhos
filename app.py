@@ -16,7 +16,10 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 USERS = {
-    'admin': {'password': '1234'}
+    'admin': {
+        'password': '1234',
+        'level':'leitor'
+        }
 }
 
 class User(UserMixin):
@@ -32,6 +35,9 @@ def load_user(user_id):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if 'logado' in session: 
+        if session['logado']:
+            return redirect(url_for('index'))
     form_login = forms.Login()
 
     if form_login.validate_on_submit():
@@ -41,6 +47,10 @@ def login():
 
         user = USERS.get(username)
         if user and user['password'] == password:
+
+            session['logado'] = True
+            session['nivel_acesso'] = user['level']
+
             user_obj = User(username)
             login_user(user_obj)
             flash('Login realizado com sucesso!', 'success')

@@ -17,9 +17,11 @@
             </div>
 
             <div class="col-12 d-flex justify-content-end">
-                <button class="btn btn-outline-secondary btn-sm col-auto" data-bs-toggle="modal" data-bs-target="#modal">
-                    Adicionar
-                </button>
+                {% if session['nivel_acesso'] == 'editor' %}
+                    <button class="btn btn-outline-secondary btn-sm col-auto" data-bs-toggle="modal" data-bs-target="#modal">
+                        Adicionar
+                    </button>
+                {% endif %}
             </div>
         </div>
         <div class="tabela-home table-responsive justify-content-center p-lg-5 p-2 border bg-white rounded mt-3">

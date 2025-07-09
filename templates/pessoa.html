@@ -31,9 +31,11 @@
         <div class="tab-content bg-white border border-top-0 p-3" id="myTabContent">
             <div class="tab-pane fade show active" id="responsabilidades" role="tabpanel" aria-labelledby="responsabilidades-tab">
                 <div class="d-flex justify-content-end mt-3">
-                    <button class="btn btn-light btn-sm col-auto" data-bs-toggle="modal" data-bs-target="#modal">
-                        Adicionar
-                    </button>
+                    {% if session['nivel_acesso'] == 'editor' %}
+                        <button class="btn btn-light btn-sm col-auto" data-bs-toggle="modal" data-bs-target="#modal">
+                            Adicionar
+                        </button>
+                    {% endif %}
                 </div>
                 <div class="tabela-home table-responsive justify-content-center p-lg-5 p-2 bg-white rounded ">
                     <table class="table table-bordered table-sm mb-0">
@@ -44,8 +46,10 @@
                                 <th scope="col" class="text-center">Setor</th>
                                 <th scope="col" class="text-center">Cidade</th>
                                 <th scope="col" class="text-center">Observações</th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
+                                {% if session['nivel_acesso'] == 'editor' %}
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                                {% endif %}
                             </tr>
                         </thead>  
                         <tbody class="table-group-divider">
@@ -60,23 +64,25 @@
                                     {% else %}
                                         <td class="text-center text-nowrap px-2">-</td>
                                     {% endif %}
-                                    <td class="text-center col-auto">
-                                        <button class="btn" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#modal-edit" 
-                                        data-cargo="{{resp.cargo}}"
-                                        data-comum="{{resp.comum}}"
-                                        data-setor="{{resp.setor}}"
-                                        data-cidade="{{resp.cidade}}"
-                                        data-id="{{resp.id_resp}}">
-                                            <i class="bi bi-pencil-fill"></i>
-                                        </button>
-                                    </td>
-                                    <td class="text-center col-auto">
-                                        <button class="btn" data-id_resp="{{resp.id_resp}}" data-bs-toggle="modal"  data-bs-target="#modal-delete">
-                                            <i class="bi bi-x-lg"></i>
-                                        </button>
-                                    </td>
+                                    {% if session['nivel_acesso'] == 'editor' %}
+                                        <td class="text-center col-auto">
+                                            <button class="btn" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#modal-edit" 
+                                            data-cargo="{{resp.cargo}}"
+                                            data-comum="{{resp.comum}}"
+                                            data-setor="{{resp.setor}}"
+                                            data-cidade="{{resp.cidade}}"
+                                            data-id="{{resp.id_resp}}">
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </button>
+                                        </td>
+                                        <td class="text-center col-auto">
+                                            <button class="btn" data-id_resp="{{resp.id_resp}}" data-bs-toggle="modal"  data-bs-target="#modal-delete">
+                                                <i class="bi bi-x-lg"></i>
+                                            </button>
+                                        </td>
+                                    {% endif %}
                                 </tr>
                             {% endfor %}
                         </tbody>

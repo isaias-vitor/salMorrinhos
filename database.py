@@ -75,7 +75,7 @@ class SupabaseClient:
                 case 'Engenharia': return 23
                 case 'Conselho Jurídico': return 24
                 case 'Monitor de Segurança': return 25
-                case 'Auxiliar de Som (RJM)': return 26
+                case 'Auxiliar do Som (RJM)': return 26
                 case 'Auxiliar de Escrita (RJM)': return 27
                 case 'Porteiro (RJM)': return 28
                 case 'Recepcionista (RJM)': return 29
@@ -326,7 +326,8 @@ class SupabaseClient:
         
 
     def editar_responsabilidade(self, id_pessoa, nome_comum, nome_cargo, id_resp, obs, resp_antiga):
-        try:
+            print(f'---{self.cargos(nome_cargo)}---')
+        # try:
             self.client.table('responsabilidades').update({
                 'id_comum':self.buscar_comum(nome_comum)['id'],
                 'id_voluntario':id_pessoa,
@@ -340,14 +341,24 @@ class SupabaseClient:
             if id_resp_antiga in busca: busca.remove(id_resp_antiga)
             busca.append(id_resp_atual)
             self.client.table('voluntarios').update({'funcoes':busca}).eq('id', id_pessoa).execute()
-        except:
-            print('Erro ao atualizar!')
-            return None
+        # except:
+        #     print('Erro ao atualizar!')
+        #     return None
         
 
     def remover_responsabilidade(self, id_resp):
-        try:
+            print(id_resp)
+        # try:
+            dados_resp = self.client.table('responsabilidades').select('funcao', 'id_voluntario').eq('id', id_resp).execute()
             delete = self.client.table('responsabilidades').delete().eq('id',id_resp).execute()
+
+            funcao = dados_resp.data[0]['funcao']
+            voluntario = dados_resp.data[0]['id_voluntario']
+            funcoes = self.client.table('voluntarios').select('funcoes').eq('id', voluntario).execute()
+            funcoes = funcoes.data[0]['funcoes']
+            funcoes.remove(funcao)
+            self.client.table('voluntarios').update({'funcoes':funcoes}).eq('id', voluntario).execute()
+            
             return print('Responsabilidade excluida com sucesso!')
-        except:
-            return print('Erro ao excluir!')
+        # except:
+        #     return print('Erro ao excluir!')
