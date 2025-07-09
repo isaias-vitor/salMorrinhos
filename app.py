@@ -15,58 +15,54 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-USERS = {
-    'admin': {
-        'password': '1234',
-        'level':'leitor'
-        }
-}
-
 class User(UserMixin):
-    def __init__(self, username):
-        self.id = username
-
+    def __init__(self, user_id, level):
+        self.id = user_id
+        self.level = level  # se quiser usar no template
 
 @login_manager.user_loader
 def load_user(user_id):
-    if user_id in USERS:
-        return User(user_id)
+    users = db.usuarios()
+    if users:
+        for user in users:
+            if str(user['id']) == str(user_id):
+                return User(user['id'], user['nivel'])
     return None
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if 'logado' in session: 
-        if session['logado']:
-            return redirect(url_for('index'))
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    
     form_login = forms.Login()
-
     if form_login.validate_on_submit():
         username = form_login.usuario.data
         password = form_login.senha.data
 
+        # Procura o usuário no banco
+        users = db.usuarios()
+        user = next((u for u in users if u['email'] == username), None)
 
-        user = USERS.get(username)
-        if user and user['password'] == password:
+        print(user)
 
-            session['logado'] = True
-            session['nivel_acesso'] = user['level']
-
-            user_obj = User(username)
+        if user and user['senha'] == password:
+            user_obj = User(user['id'], user['nivel'])
             login_user(user_obj)
             flash('Login realizado com sucesso!', 'success')
             next_page = request.args.get('next')
-            return redirect(next_page or url_for('index'))
+            return redirect(url_for('index'))
         else:
             flash('Usuário ou senha inválidos!', 'danger')
 
     return render_template('login.html', form=form_login)
 
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
-    session.clear()
-    flash('Você saiu com sucesso!', 'infor')
+    flash('Você saiu com sucesso!', 'info')
     return redirect(url_for('login'))
+
 
 @app.route("/")
 @login_required

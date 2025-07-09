@@ -91,6 +91,14 @@ class SupabaseClient:
         except:
             return None
     
+    def usuarios(self):
+        try:
+            users = self.client.table('usuarios').select('id', 'nome', 'email', 'senha', 'nivel').execute()
+            print(users.data)
+            return users.data
+        except:
+            print('Erro ao buscar usuários!')
+            return None
     
     def inserir_cargo(self, nome, comum, cidade, setor, cargo) -> dict:
         try:
