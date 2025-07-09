@@ -1,6 +1,6 @@
 from flask import *
 import forms
-from os import getenv
+from os import getenv, environ
 from database import *
 from dotenv import load_dotenv
 from flask_login import LoginManager, login_user, login_required, logout_user, UserMixin, current_user
@@ -9,6 +9,7 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = getenv('SECRET_KEY_APP')
+print(getenv('SECRET_KEY_APP'))
 db = SupabaseClient()
 
 login_manager = LoginManager()
@@ -308,4 +309,5 @@ def lista_igrejas():
     return lista_igrejas
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(environ.get("PORT", 5000))  # usa PORT do Render, ou 5000 local
+    app.run(host="0.0.0.0", port=port)
